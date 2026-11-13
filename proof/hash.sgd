@@ -1,0 +1,10 @@
+func nop(frame: PackedByteArray) -> int:
+	return 0
+
+
+func sha_hex(frame: PackedByteArray) -> PackedByteArray:
+	return frame.hex_encode().sha256_buffer()
+
+
+func hash32(frame: PackedByteArray) -> int:
+	return hash(frame)

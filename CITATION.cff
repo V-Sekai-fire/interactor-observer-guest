@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "interactor-observer-guest"
+abstract: "One client's check of what a zone relays: it hashes each sender's frames, tags its own for each viewer, and judges every sender from four reports."
+type: software
+authors:
+  - family-names: "Lee"
+    given-names: "K. S. Ernest (iFire)"
+license: MIT
+repository-code: "https://github.com/V-Sekai-fire/interactor-observer-guest"
+date-released: "2026-11-13"
