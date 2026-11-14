@@ -20,6 +20,7 @@ const SENDER_OR_ZONE: int = 3
 const ZONE: int = 4
 const ME: int = 5
 const VIEWER: int = 10
+const SILENT: int = 20
 
 var me: int = 0
 var people: Array = [-1, -1, -1, -1]
@@ -162,23 +163,27 @@ func close(send: int) -> PackedInt32Array:
 		var own: PackedByteArray = echoes[o]
 		var seen: Array = []
 		var who: Array = []
-		var whole: bool = true
+		var gone: int = -1
 		for v in 3:
 			var vslot: int = _slot_of(v)
 			if vslot == slot:
 				continue
 			if not got_ok[v * 2 + 1]:
-				whole = false
+				gone = vslot
 				continue
 			var theirs: PackedByteArray = got[v * 2 + 1]
 			var d: int = _other_of(slot, vslot)
 			var at: int = (FIRST_DUMMY + d) * PACKET_BYTES + OFF_PAYLOAD
 			if theirs.decode_u32(at + 32) != send:
-				whole = false
+				gone = vslot
 				continue
 			seen.append(theirs.slice(at, at + HASH_BYTES))
 			who.append(vslot)
-		if not whole or seen.size() != 2 or own.size() != HASH_BYTES:
+		if seen.is_empty() or own.size() != HASH_BYTES:
+			continue
+		if seen.size() == 1:
+			if _same(said, own) and _same(said, seen[0]):
+				verdicts[o] = SILENT + gone
 			continue
 		var a: PackedByteArray = seen[0]
 		var b: PackedByteArray = seen[1]
